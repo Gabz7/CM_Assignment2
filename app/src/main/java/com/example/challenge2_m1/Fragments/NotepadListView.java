@@ -24,7 +24,7 @@ import com.example.challenge2_m1.MyArrayAdapter;
 import com.example.challenge2_m1.NotepadViewModel;
 import com.example.challenge2_m1.R;
 
-public class NotepadList extends Fragment {
+public class NotepadListView extends Fragment {
 
     private static final int CMD_EDIT = 0;
     private static final int CMD_DELETE = 1;

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.example.challenge2_m1.Fragments.NotepadList;
+import com.example.challenge2_m1.Fragments.NotepadListView;
 import com.example.challenge2_m1.Model.Note;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .add(R.id.MainActivityLayout, NotepadList.class, null)
+                .add(R.id.MainActivityLayout, NotepadListView.class, null)
                 .addToBackStack("First Fragment")
                 .commit();
     }
