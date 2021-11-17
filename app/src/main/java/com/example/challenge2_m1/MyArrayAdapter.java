@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
 import com.example.challenge2_m1.Model.Note;
 
 import java.util.ArrayList;
@@ -33,13 +31,5 @@ public class MyArrayAdapter extends ArrayAdapter<Note> {
         TextView tvNote = convertView.findViewById(R.id.noteLabel);
         tvNote.setText(currentNote.getName());
         return convertView;
-    }
-
-    public void updateNoteName(int index, String name){
-        viewModel.updateNote(index, name);
-    }
-
-    public void removeNote(int index){
-        viewModel.removeNote(index);
     }
 }
