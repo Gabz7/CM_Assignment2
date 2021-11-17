@@ -1,0 +1,17 @@
+com/example/challenge2_m1/BuildConfig.java
+ com.example.challenge2_m1.BuildConfig
+com/example/challenge2_m1/Fragments/NoteView.java
+ com.example.challenge2_m1.Fragments.NoteView
+com/example/challenge2_m1/Model/Note.java
+ com.example.challenge2_m1.Model.Note
+com/example/challenge2_m1/NotepadViewModel.java
+ com.example.challenge2_m1.NotepadViewModel
+com/example/challenge2_m1/MyArrayAdapter.java
+ com.example.challenge2_m1.MyArrayAdapter
+com/example/challenge2_m1/Fragments/EditDialogFragment.java
+ com.example.challenge2_m1.Fragments.EditDialogFragment
+com/example/challenge2_m1/Fragments/NotepadList.java
+ com.example.challenge2_m1.Fragments.NotepadList
+ com.example.challenge2_m1.Fragments.NotepadList$1
+com/example/challenge2_m1/MainActivity.java
+ com.example.challenge2_m1.MainActivity
