@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.challenge2_m1.Model.Note;
 import com.example.challenge2_m1.NotepadViewModel;
@@ -21,12 +21,10 @@ import com.example.challenge2_m1.R;
 public class NoteView extends Fragment {
 
     private static final int NEW_NOTE = -1;
-    private static final int CMD_SAVE = 0;
-    private static final int CMD_DELETE = 1;
+    private Button saveButton, cancelButton;
     private EditText etNote;
     private Toolbar toolbar;
     private NotepadViewModel viewModel;
-    private boolean wasPaused = false;
     private Dialog saveDialog;
 
     public NoteView() {}
@@ -49,6 +47,36 @@ public class NoteView extends Fragment {
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
+        saveButton = getActivity().findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(viewModel.getElementIndex() == NEW_NOTE) {
+                    saveDialog = new AlertDialog.Builder(getContext())
+                            .setTitle("Save Note")
+                            .setView(inflater.inflate(R.layout.fragment_save_note, null))
+                            .setPositiveButton("Save", (dialog, id) -> {
+                                saveNote();
+                                getParentFragmentManager().popBackStack();
+                            })
+                            .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss())
+                            .create();
+                    saveDialog.show();
+                }else{
+                    saveNote();
+                    getParentFragmentManager().popBackStack();
+                }
+            }
+        });
+
+        cancelButton = getActivity().findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
         etNote = getActivity().findViewById(R.id.etNote);
         etNote.setFocusable(true);
         etNote.requestFocusFromTouch();
@@ -58,35 +86,6 @@ public class NoteView extends Fragment {
         }
 
         toolbar = getActivity().findViewById(R.id.noteToolbar);
-        toolbar.inflateMenu(R.menu.noteview_menu);
-        toolbar.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()){
-                case R.id.save_action:
-                    if(viewModel.getElementIndex() == NEW_NOTE) {
-                        LayoutInflater inf = inflater;
-                        saveDialog = new AlertDialog.Builder(getContext())
-                                .setTitle("Save Note")
-                                .setView(inflater.inflate(R.layout.fragment_save_note, null))
-                                .setPositiveButton("Save", (dialog, id) -> {
-                                    saveNote();
-                                    getParentFragmentManager().popBackStack();
-                                })
-                                .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss())
-                                .create();
-                        saveDialog.show();
-                    }else{
-                        saveNote();
-                        getParentFragmentManager().popBackStack();
-                    }
-                    break;
-                case R.id.back_action:
-                    getParentFragmentManager().popBackStack();
-                    break;
-                default:
-                    return false;
-            }
-            return false;
-        });
     }
 
     private void saveNote(){

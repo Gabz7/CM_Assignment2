@@ -5,10 +5,10 @@
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/add_action"
-        android:title="Add Note"
+        android:title="@string/add_note"
         app:showAsAction="never" />
 
     <item android:id="@+id/search_action"
-        android:title="Search"
+        android:title="@string/search"
         app:showAsAction="never" />
 </menu>

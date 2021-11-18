@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int EMPTY = 0;
     private FragmentManager fragmentManager;
     private NotepadViewModel viewModel;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor prefsEditor;
+    ArrayList<Note> notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(NotepadViewModel.class);
 
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
         prefs = getPreferences(MODE_PRIVATE);
         Map<String, ?> data = prefs.getAll();
-        if(data != null){
+        if(data.size() != EMPTY){
             for(int i = 0; i < data.size(); i++) {
                 name = prefs.getString("Note" + i, "defaultValue");
                 viewModel.addNote(name);
@@ -52,9 +54,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        ArrayList<Note> notes = viewModel.getNotes();
-        prefs = getPreferences(MODE_PRIVATE);
-        prefsEditor = prefs.edit();
+        notes = viewModel.getNotes();
+
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+
+        prefsEditor.clear().apply();
 
         for(int i = 0; i < notes.size(); i++){
             prefsEditor.putString("Note" + i, notes.get(i).getName());
@@ -65,5 +70,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+
+        notes = viewModel.getNotes();
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+
+        //prefsEditor.clear().apply();
+
+        for(int i = 0; i < notes.size(); i++){
+            prefsEditor.putString("Note" + i, notes.get(i).getName());
+        }
+        prefsEditor.apply(); // or commit();
     }
 }
