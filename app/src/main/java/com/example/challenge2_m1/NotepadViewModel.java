@@ -1,13 +1,10 @@
 package com.example.challenge2_m1;
 
 import androidx.lifecycle.ViewModel;
-
 import com.example.challenge2_m1.Model.Note;
-
 import java.util.ArrayList;
 
 public class NotepadViewModel extends ViewModel {
-    private static final int NOTE_INIT = 5;
     private final ArrayList<Note> notes = new ArrayList<>();
     private int elementIndex;
     private MyArrayAdapter adapter;
@@ -22,13 +19,8 @@ public class NotepadViewModel extends ViewModel {
         adapter.notifyDataSetChanged();
     }
 
-    public void removeNote(int index){
-        notes.remove(index);
-        adapter.notifyDataSetChanged();
-    }
-
-    public void updateNote(int index, String newName){
-        notes.get(index).setName(newName);
+    public void updateCurrentName(String name){
+        notes.get(elementIndex).setName(name);
         adapter.notifyDataSetChanged();
     }
 
@@ -36,9 +28,14 @@ public class NotepadViewModel extends ViewModel {
         notes.get(elementIndex).setContent(content);
     }
 
-    public void setAdpter(MyArrayAdapter adapter) { this.adapter = adapter; }
-
     public Note getNote(int index){ return notes.get(index); }
+
+    public Note getCurrentNote(){
+        if(elementIndex != -1)
+            return notes.get(elementIndex);
+        else
+            return null;
+    }
 
     public ArrayList<Note> getNotes(){ return notes; }
 
@@ -46,9 +43,10 @@ public class NotepadViewModel extends ViewModel {
 
     public void setElementIndex(int elementIndex) { this.elementIndex = elementIndex; }
 
-    public void populate(){
-        for(int i = 0; i < NOTE_INIT; i++){
-            notes.add(new Note("Note " + i));
-        }
+    public void setAdapter(MyArrayAdapter adapter) { this.adapter = adapter; }
+
+    public void removeNote(int index){
+        notes.remove(index);
+        adapter.notifyDataSetChanged();
     }
 }
