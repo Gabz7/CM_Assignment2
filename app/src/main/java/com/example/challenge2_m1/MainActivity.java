@@ -5,27 +5,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import com.example.challenge2_m1.Fragments.NotepadListView;
 import com.example.challenge2_m1.Model.Note;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MyTaskManager.Callback {
     private static final int EMPTY = 0;
-    private static final String FILENAME = ".txt";
     private NotepadViewModel viewModel;
+    private MyTaskManager taskManager;
     ArrayList<Note> notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        taskManager = new MyTaskManager(this);
         setContentView(R.layout.activity_main);
 
         viewModel = new ViewModelProvider(this).get(NotepadViewModel.class);
@@ -54,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
         writeToTxt();
     }
 
+    @Override
+    public void onSaveToTxt() {
+        System.out.println("Notes Successfully Saved to File System");
+    }
+
+    @Override
+    public void onLoadFromTxt() { System.out.println("Notes Successfully Loaded from File System"); }
+
     public void readFromSharedPrefs(){
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         String name;
@@ -64,41 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 name = prefs.getString("Note" + i, "defaultValue");
                 viewModel.addNote(name);
             }
-        }
-    }
-    public void readFromTxt(){
-        String ret;
-        ArrayList<Note> notes = viewModel.getNotes();
-
-        try {
-            for(int i = 0; i < notes.size(); i++) {
-                InputStream inputStream = this.openFileInput("" + notes.get(i).getName() + ".txt");
-
-                if (inputStream != null) {
-                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String receiveString;
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    while ((receiveString = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(receiveString);
-                        stringBuilder.append("\n");
-                    }
-
-                    stringBuilder.deleteCharAt(stringBuilder.length() -1);
-
-                    inputStream.close();
-                    ret = stringBuilder.toString();
-                    notes.get(i).setContent(ret);
-
-                    System.out.println(inputStream.toString());
-                }
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
         }
     }
 
@@ -115,20 +82,10 @@ public class MainActivity extends AppCompatActivity {
         }
         prefsEditor.apply(); // or commit();
     }
+
+    public void readFromTxt(){ taskManager.executeLoad(viewModel.getNotes(), this); }
+
     public void writeToTxt(){
-        FileOutputStream fos;
-        Note currentNote;
-        notes = viewModel.getNotes();
-
-
-        try {
-            for (int i = 0; i < notes.size(); i++) {
-                currentNote = notes.get(i);
-                fos = openFileOutput(currentNote.getName() + FILENAME, MODE_PRIVATE);
-                fos.write(currentNote.getContent().getBytes());
-                System.out.println(getFilesDir());
-                fos.close();
-            }
-        }catch(Exception e){ e.printStackTrace(); }
+        taskManager.executeSave(viewModel.getNotes(), this);
     }
 }

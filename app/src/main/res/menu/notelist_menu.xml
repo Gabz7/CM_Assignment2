@@ -6,9 +6,9 @@
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/add_action"
         android:title="@string/add_note"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
     <item android:id="@+id/search_action"
         android:title="@string/search"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>
