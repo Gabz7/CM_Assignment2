@@ -48,6 +48,12 @@ public class MainActivity extends AppCompatActivity implements MyTaskManager.Cal
         writeToTxt();
     }
 
+    public void createDB(){}
+
+    public void writeToDB(){}
+
+    public void readFromDB(){}
+
     @Override
     public void onSaveToTxt() {
         System.out.println("Notes Successfully Saved to File System");
