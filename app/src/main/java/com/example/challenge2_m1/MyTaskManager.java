@@ -49,38 +49,38 @@ public class MyTaskManager {
     }
 
     public void executeLoad(ArrayList<Note> notes, Callback callback){
-        String ret;
+        executor.execute(() ->{
+            String ret;
+            try {
+                for (int i = 0; i < notes.size(); i++) {
+                    InputStream inputStream = myContext.openFileInput("" + notes.get(i).getName() + ".txt");
 
-        try {
-            for(int i = 0; i < notes.size(); i++) {
-                InputStream inputStream = myContext.openFileInput("" + notes.get(i).getName() + ".txt");
+                    if (inputStream != null) {
+                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        String receiveString;
+                        StringBuilder stringBuilder = new StringBuilder();
 
-                if (inputStream != null) {
-                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String receiveString;
-                    StringBuilder stringBuilder = new StringBuilder();
+                        while ((receiveString = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(receiveString);
+                            stringBuilder.append("\n");
+                        }
 
-                    while ((receiveString = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(receiveString);
-                        stringBuilder.append("\n");
+                        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+
+                        inputStream.close();
+                        ret = stringBuilder.toString();
+                        notes.get(i).setContent(ret);
+
+                        System.out.println(inputStream.toString());
                     }
-
-                    stringBuilder.deleteCharAt(stringBuilder.length() -1);
-
-                    inputStream.close();
-                    ret = stringBuilder.toString();
-                    notes.get(i).setContent(ret);
-
-                    System.out.println(inputStream.toString());
                 }
+            } catch (FileNotFoundException e) {
+                Log.e("login activity", "File not found: " + e.toString());
+            } catch (IOException e) {
+                Log.e("login activity", "Can not read file: " + e.toString());
             }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
+        });
     }
 
 }
