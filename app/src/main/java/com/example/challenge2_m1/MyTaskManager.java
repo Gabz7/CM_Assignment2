@@ -81,6 +81,7 @@ public class MyTaskManager {
                 Log.e("login activity", "Can not read file: " + e.toString());
             }
         });
+        handler.post(callback::onLoadFromTxt);
     }
 
 }
