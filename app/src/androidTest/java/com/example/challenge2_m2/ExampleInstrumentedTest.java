@@ -1,4 +1,4 @@
-package com.example.challenge2_m1;
+package com.example.challenge2_m2;
 
 import android.content.Context;
 

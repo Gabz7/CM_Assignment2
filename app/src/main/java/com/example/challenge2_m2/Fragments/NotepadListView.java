@@ -1,4 +1,4 @@
-package com.example.challenge2_m1.Fragments;
+package com.example.challenge2_m2.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -17,20 +17,26 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import com.example.challenge2_m1.MyArrayAdapter;
-import com.example.challenge2_m1.NotepadViewModel;
-import com.example.challenge2_m1.R;
+import com.example.challenge2_m2.Model.Note;
+import com.example.challenge2_m2.Model.Topic;
+import com.example.challenge2_m2.MyArrayAdapter;
+import com.example.challenge2_m2.MyTaskManager;
+import com.example.challenge2_m2.NotepadViewModel;
+import com.example.challenge2_m2.R;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class NotepadListView extends Fragment {
-
+public class NotepadListView extends Fragment implements MyTaskManager.Callback {
     private static final int NEW_NOTE = -1;
     private static final int CMD_EDIT = 0;
     private static final int CMD_DELETE = 1;
+    private static final int CMD_SHARE = 2;
     private MyArrayAdapter adapter;
     private NotepadViewModel viewModel;
-    private SearchView searchbar;
     private Dialog saveDialog;
     private EditText etNote;
+    private LayoutInflater inflater;
+    private View shareView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +58,7 @@ public class NotepadListView extends Fragment {
         adapter = new MyArrayAdapter(getContext(), R.layout.note_element, viewModel.getNotes(), viewModel);
         viewModel.setAdapter(adapter);
 
-        searchbar = requireActivity().findViewById(R.id.searcbar);
+        SearchView searchbar = requireActivity().findViewById(R.id.searchbar);
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -85,10 +91,12 @@ public class NotepadListView extends Fragment {
                             .addToBackStack("NoteView Fragment")
                             .commit();
                     return true;
-                case R.id.search_action:
-                    searchbar.setFocusable(true);
-                    searchbar.setIconified(false);
-                    searchbar.requestFocusFromTouch();
+                case R.id.go_topic_action:
+                    getParentFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.MainActivityLayout, TopicsListView.class, null)
+                            .addToBackStack("NoteListView Fragment")
+                            .commit();
                     return true;
             }
 
@@ -110,7 +118,7 @@ public class NotepadListView extends Fragment {
                     .commit();
         });
 
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        inflater = requireActivity().getLayoutInflater();
         saveDialog = new AlertDialog.Builder(getContext())
                 .setTitle("Edit Note")
                 .setView(inflater.inflate(R.layout.fragment_edit_dialog, null))
@@ -121,6 +129,7 @@ public class NotepadListView extends Fragment {
                 .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss()).create();
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int index = item.getItemId();
@@ -143,19 +152,61 @@ public class NotepadListView extends Fragment {
                         })
                         .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss()).create().show();
                 return true;
+            case CMD_SHARE:
+                shareView = inflater.inflate(R.layout.fragment_edit_dialog, null);
+                AlertDialog shareDialog = new AlertDialog.Builder(getContext())
+                        .setTitle("Share Note")
+                        .setMessage("To what(which) topic(s) would you like to share this note to?")
+                        .setView(shareView)
+                        .setPositiveButton("Yes", (dialog, id) -> {
+                            shareNote();
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss()).create();
+
+                shareDialog.show();
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
+    @Override
+    public void onAddToDB() {}
+
+    @Override
+    public void onLoadFromDB(ArrayList<Note> notes, ArrayList<Topic> topics) {}
+
+    @Override
+    public void onLoadToDB() {}
+
+    @Override
+    public void onUpdateDB() { System.out.println("Database updated Successfully :)"); }
+
+    @Override
+    public void onRemoveFromDB() { System.out.println("Note Successfully Removed:)"); }
+
     public void onCreateContextMenu(ContextMenu menu, @NonNull View v, ContextMenu.ContextMenuInfo menuInfo) {
         menu.add(0, CMD_EDIT, 0, "Edit");
         menu.add(0, CMD_DELETE, 0, "Delete");
+        menu.add(0, CMD_SHARE, 0, "Share");
     }
 
-    private void saveNote(){ viewModel.updateCurrentName(etNote.getText().toString()); }
+    private void saveNote(){ viewModel.updateCurrentName(etNote.getText().toString(), this); }
 
     private void deleteNote(){
-        viewModel.removeNote(viewModel.getElementIndex());
+        viewModel.removeNote(viewModel.getElementIndex(), this);
+    }
+
+    private void shareNote(){
+        EditText etTopics = shareView.findViewById(R.id.editNoteName);
+        String topics = etTopics.getText().toString();
+        if(topics.contains(",")){
+            ArrayList<String> topicsList = new ArrayList<>(Arrays.asList(topics.split(",")));
+            for(int i = 0; i < topicsList.size(); i++){
+                viewModel.publishNote(viewModel.getElementIndex(), topicsList.get(i) + "/");
+            }
+        }else
+            viewModel.publishNote(viewModel.getElementIndex(), topics + "/");
     }
 }

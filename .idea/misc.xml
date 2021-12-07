@@ -9,14 +9,20 @@
         <entry key="app/src/main/res/layout/fragment_edit_dialog.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_edit_dialogue.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_note_view.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_notelist.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/fragment_notelist.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_notepad_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_save_note.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_topic_dialog.xml" value="0.13134057971014493" />
+        <entry key="app/src/main/res/layout/fragment_topiclist_.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_topics_.xml" value="0.13134057971014493" />
         <entry key="app/src/main/res/layout/listview_layout.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/layout/message_arrived_dialog.xml" value="0.13134057971014493" />
         <entry key="app/src/main/res/layout/note_element.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/note_menu.xml" value="0.1490036231884058" />
-        <entry key="app/src/main/res/menu/notelist_menu.xml" value="0.30462962962962964" />
+        <entry key="app/src/main/res/layout/topic_element.xml" value="0.13134057971014493" />
+        <entry key="app/src/main/res/menu/notelist_menu.xml" value="0.335" />
         <entry key="app/src/main/res/menu/noteview_menu.xml" value="0.30462962962962964" />
+        <entry key="app/src/main/res/menu/topiclist_menu.xml" value="0.1" />
       </map>
     </option>
   </component>

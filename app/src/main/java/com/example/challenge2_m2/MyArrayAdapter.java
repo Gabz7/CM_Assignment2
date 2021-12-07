@@ -1,4 +1,4 @@
-package com.example.challenge2_m1;
+package com.example.challenge2_m2;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
-import com.example.challenge2_m1.Model.Note;
+import com.example.challenge2_m2.Model.Note;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,11 +88,11 @@ public class MyArrayAdapter extends ArrayAdapter<Note> {
         @Override
         protected void publishResults(CharSequence constraint,
                                       FilterResults results) {
-            ArrayList<T> filtered = (ArrayList<T>) results.values;
+            ArrayList<Note> filtered = (ArrayList<Note>) results.values;
             notifyDataSetChanged();
             clear();
             for (int i = 0, l = filtered.size(); i < l; i++)
-                add((Note) filtered.get(i));
+                add(filtered.get(i));
             notifyDataSetInvalidated();
         }
     }
