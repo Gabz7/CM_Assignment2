@@ -131,8 +131,21 @@ public class MQTTHelper implements MyTaskManager.Callback {
                 .setMessage("A new message from " + topic + " arrived. Would you like to accept it?")
                 .setPositiveButton("Accept", (dialog, id) -> {
                     try {
+                        String name, content;
                         JSONObject jsonObj = new JSONObject(message.toString());
-                        Note newNote = new Note(jsonObj.get("Name") + " - " + topic, jsonObj.get("Content").toString());
+                        if(jsonObj.isNull("Name")){
+                            name = "";
+                        }else{
+                            name = jsonObj.get("Name").toString();
+                        }
+
+                        if(jsonObj.isNull("Content")){
+                            content = "";
+                        }else{
+                            content = jsonObj.get("Conent").toString();
+                        }
+
+                        Note newNote = new Note(name + " - " + topic, content);
                         viewModel.addNote(newNote, this);
                         dialog.dismiss();
                     }catch (Exception e){ e.printStackTrace();}

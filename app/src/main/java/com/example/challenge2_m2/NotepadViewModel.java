@@ -31,8 +31,16 @@ public class NotepadViewModel extends ViewModel{
         try {
             String message;
             JSONObject json = new JSONObject();
-            json.put("Name", notes.get(index).getName());
-            json.put("Content", notes.get(index).getContent());
+
+            if(notes.get(index).getName().equalsIgnoreCase(""))
+                json.isNull("Name");
+            else
+                json.put("Name", notes.get(index).getName());
+
+            if(notes.get(index).getContent().equalsIgnoreCase(""))
+                json.isNull("Content");
+            else
+                json.put("Content", notes.get(index).getContent());
 
             message = json.toString();
             MqttMessage mqttMessage = new MqttMessage(message.getBytes(StandardCharsets.UTF_8));

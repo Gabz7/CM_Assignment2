@@ -116,7 +116,7 @@ public class TopicsListView extends Fragment {
     }
 
     public void subscribeToTopic(){
-        Topic newTopic = new Topic(et.getText().toString() + "/");
+        Topic newTopic = new Topic(et.getText().toString());
         viewModel.subscribeToTopic(newTopic);
         et.setText("");
     }
