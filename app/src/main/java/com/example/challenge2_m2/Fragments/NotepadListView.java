@@ -156,7 +156,7 @@ public class NotepadListView extends Fragment implements MyTaskManager.Callback 
                 shareView = inflater.inflate(R.layout.fragment_edit_dialog, null);
                 AlertDialog shareDialog = new AlertDialog.Builder(getContext())
                         .setTitle("Share Note")
-                        .setMessage("To what(which) topic(s) would you like to share this note to?")
+                        .setMessage("To what(which) topic(s) would you like to share this note to? (Separate Topics with commas (','))")
                         .setView(shareView)
                         .setPositiveButton("Yes", (dialog, id) -> {
                             shareNote();
