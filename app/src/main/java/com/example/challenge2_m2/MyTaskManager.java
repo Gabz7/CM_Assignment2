@@ -177,13 +177,7 @@ public class MyTaskManager {
     }
 
     public void executePublish(MqttMessage message, String topic){
-        executor.execute(() -> {
-            try {
-                mqttHelper.getClient().publish(topic, message);
-            } catch (MqttException e) {
-                e.printStackTrace();
-            }
-        });
+        executor.execute(() -> mqttHelper.publishNote(topic, message));
     }
 
     public void executeStop(){

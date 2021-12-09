@@ -142,7 +142,7 @@ public class MQTTHelper implements MyTaskManager.Callback {
                         if(jsonObj.isNull("Content")){
                             content = "";
                         }else{
-                            content = jsonObj.get("Conent").toString();
+                            content = jsonObj.get("Content").toString();
                         }
 
                         Note newNote = new Note(name + " - " + topic, content);
@@ -154,6 +154,14 @@ public class MQTTHelper implements MyTaskManager.Callback {
         newMessage.show();
         System.out.println("Message Arrived from topic: " + topic);
         System.out.println("Message: " + message);
+    }
+
+    public void publishNote(String topic, MqttMessage message){
+        try {
+            mqttAndroidClient.publish(topic, message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName() { return name; }
