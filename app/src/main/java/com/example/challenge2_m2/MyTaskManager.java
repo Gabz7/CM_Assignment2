@@ -147,7 +147,6 @@ public class MyTaskManager {
 
     public void executeConnect(){
         executor.execute(() -> {
-            createMQTTCallback();
             callbackExtended = createMQTTCallback();
             mqttHelper.setCallback(callbackExtended);
             mqttHelper.connect();
